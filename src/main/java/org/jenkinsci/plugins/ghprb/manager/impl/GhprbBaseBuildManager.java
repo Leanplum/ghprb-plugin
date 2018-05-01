@@ -8,15 +8,16 @@ import hudson.tasks.junit.TestResult;
 import hudson.tasks.test.AbstractTestResultAction;
 import hudson.tasks.test.AggregatedTestResultAction;
 import hudson.tasks.test.AggregatedTestResultAction.ChildReport;
+import jenkins.model.Jenkins;
+import org.jenkinsci.plugins.ghprb.manager.GhprbBuildManager;
+import org.jenkinsci.plugins.ghprb.manager.configuration.JobConfiguration;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jenkins.model.Jenkins;
-import org.jenkinsci.plugins.ghprb.manager.GhprbBuildManager;
-import org.jenkinsci.plugins.ghprb.manager.configuration.JobConfiguration;
 
 /**
  * @author mdelapenya (Manuel de la Peña)

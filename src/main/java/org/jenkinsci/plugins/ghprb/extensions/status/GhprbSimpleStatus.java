@@ -48,8 +48,6 @@ public class GhprbSimpleStatus extends GhprbExtension implements
 
     private final Boolean addTestResults;
 
-    private final Boolean addCoverageResults;
-
     private final List<GhprbBuildResultMessage> completedStatus;
 
     public GhprbSimpleStatus() {
@@ -57,7 +55,7 @@ public class GhprbSimpleStatus extends GhprbExtension implements
     }
 
     public GhprbSimpleStatus(String commitStatusContext) {
-        this(false, commitStatusContext, null, null, null, false, false, new ArrayList<GhprbBuildResultMessage>(0));
+        this(false, commitStatusContext, null, null, null, false, new ArrayList<GhprbBuildResultMessage>(0));
     }
 
     @DataBoundConstructor
@@ -67,7 +65,6 @@ public class GhprbSimpleStatus extends GhprbExtension implements
                              String triggeredStatus,
                              String startedStatus,
                              Boolean addTestResults,
-                             Boolean addCoverageResults,
                              List<GhprbBuildResultMessage> completedStatus) {
         this.showMatrixStatus = showMatrixStatus;
         this.statusUrl = statusUrl;
@@ -75,7 +72,6 @@ public class GhprbSimpleStatus extends GhprbExtension implements
         this.triggeredStatus = triggeredStatus;
         this.startedStatus = startedStatus;
         this.addTestResults = addTestResults;
-        this.addCoverageResults = addCoverageResults;
         this.completedStatus = completedStatus;
     }
 
@@ -101,10 +97,6 @@ public class GhprbSimpleStatus extends GhprbExtension implements
 
     public Boolean getAddTestResults() {
         return addTestResults == null ? Boolean.valueOf(false) : addTestResults;
-    }
-
-    public Boolean getAddCoverageResults() {
-        return addCoverageResults == null ? Boolean.valueOf(false) : addCoverageResults;
     }
 
     public List<GhprbBuildResultMessage> getCompletedStatus() {
@@ -223,26 +215,6 @@ public class GhprbSimpleStatus extends GhprbExtension implements
                 listener.getLogger().println("Adding one-line test results to commit status...");
                 sb.append(buildManager.getOneLineTestResults());
             }
-            if (getAddCoverageResults()) {
-                listener.getLogger().println("Adding coverage results to commit status...");
-
-                String coverageResultString;
-                GHCommitState coverageState;
-                Map<String, String> envVars = Ghprb.getEnvVars(build, listener);
-                if (!envVars.containsKey("newCodeCoveragePercentage")) {
-                    coverageResultString = "No coverage results found.";
-                    coverageState = GHCommitState.SUCCESS;
-                } else {
-                    String newCodeCoveragePercentage = envVars.get("newCodeCoveragePercentage");
-                    coverageResultString = newCodeCoveragePercentage + "% line coverage on new code.";
-                    int coveragePercent = Integer.parseInt(newCodeCoveragePercentage);
-                    coverageState = coveragePercent > 1 ? GHCommitState.SUCCESS : GHCommitState.ERROR;
-                }
-
-                String context = Util.fixEmpty(commitStatusContext);
-                context = Ghprb.replaceMacros(build, listener, context) + " Coverage";
-                createCommitStatus(build, listener, coverageResultString, repo, coverageState, context);
-            }
         }
 
         createCommitStatus(build, listener, sb.toString(), repo, state);
@@ -252,8 +224,7 @@ public class GhprbSimpleStatus extends GhprbExtension implements
                                     TaskListener listener,
                                     String message,
                                     GHRepository repo,
-                                    GHCommitState state,
-                                    String context) throws GhprbCommitStatusException {
+                                    GHCommitState state) throws GhprbCommitStatusException {
 
         Map<String, String> envVars = Ghprb.getEnvVars(build, listener);
 
@@ -274,6 +245,9 @@ public class GhprbSimpleStatus extends GhprbExtension implements
             url = Ghprb.replaceMacros(build, listener, statusUrl);
         }
 
+        String context = Util.fixEmpty(commitStatusContext);
+        context = Ghprb.replaceMacros(build, listener, context);
+
         listener.getLogger().println(String.format("Setting status of %s to %s with url %s and message: '%s'",
                 sha1,
                 state,
@@ -289,16 +263,6 @@ public class GhprbSimpleStatus extends GhprbExtension implements
         } catch (IOException e) {
             throw new GhprbCommitStatusException(e, state, message, pullId);
         }
-    }
-
-    private void createCommitStatus(Run<?, ?> build,
-                                    TaskListener listener,
-                                    String message,
-                                    GHRepository repo,
-                                    GHCommitState state) throws GhprbCommitStatusException {
-        String context = Util.fixEmpty(commitStatusContext);
-        context = Ghprb.replaceMacros(build, listener, context);
-        createCommitStatus(build, listener, message, repo, state, context);
     }
 
     public void createCommitStatus(Job<?, ?> project,
@@ -355,10 +319,6 @@ public class GhprbSimpleStatus extends GhprbExtension implements
 
         public Boolean getAddTestResultsDefault(GhprbSimpleStatus local) {
             return Ghprb.getDefaultValue(local, GhprbSimpleStatus.class, "getAddTestResults");
-        }
-
-        public Boolean getAddCoverageResultsDefault(GhprbSimpleStatus local) {
-            return Ghprb.getDefaultValue(local, GhprbSimpleStatus.class, "getAddCoverageResults");
         }
 
         public List<GhprbBuildResultMessage> getCompletedStatusDefault(GhprbSimpleStatus local) {

@@ -36,8 +36,6 @@ public class GhprbUpstreamStatus extends BuildWrapper {
 
     private final Boolean addTestResults;
 
-    private final Boolean addCoverageResults;
-
     private final List<GhprbBuildResultMessage> completedStatus;
 
     // sets the context and message as env vars so that they are available in the Listener class
@@ -50,7 +48,6 @@ public class GhprbUpstreamStatus extends BuildWrapper {
         variables.put("ghprbStartedStatus", getStartedStatus());
         variables.put("ghprbStatusUrl", getStatusUrl());
         variables.put("ghprbAddTestResults", Boolean.toString(getAddTestResults()));
-        variables.put("ghprbAddCoverageResults", Boolean.toString(getAddCoverageResults()));
 
         Map<GHCommitState, StringBuilder> statusMessages = new HashMap<GHCommitState, StringBuilder>(INITIAL_CAPACITY);
 
@@ -97,7 +94,6 @@ public class GhprbUpstreamStatus extends BuildWrapper {
             String triggeredStatus,
             String startedStatus,
             Boolean addTestResults,
-            Boolean addCoverageResults,
             List<GhprbBuildResultMessage> completedStatus
     ) {
         this.showMatrixStatus = showMatrixStatus;
@@ -106,7 +102,6 @@ public class GhprbUpstreamStatus extends BuildWrapper {
         this.triggeredStatus = triggeredStatus;
         this.startedStatus = startedStatus;
         this.addTestResults = addTestResults;
-        this.addCoverageResults = addCoverageResults;
         this.completedStatus = completedStatus;
     }
 
@@ -129,10 +124,6 @@ public class GhprbUpstreamStatus extends BuildWrapper {
 
     public Boolean getAddTestResults() {
         return addTestResults == null ? Boolean.valueOf(false) : addTestResults;
-    }
-
-    public Boolean getAddCoverageResults() {
-        return addCoverageResults == null ? Boolean.valueOf(false) : addCoverageResults;
     }
 
     public Boolean getShowMatrixStatus() {

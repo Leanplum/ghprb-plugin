@@ -1,13 +1,5 @@
 package org.jenkinsci.plugins.ghprb.extensions.status;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-
-import java.util.ArrayList;
 import org.jenkinsci.plugins.ghprb.GhprbPullRequest;
 import org.jenkinsci.plugins.ghprb.GhprbTestUtil;
 import org.jenkinsci.plugins.ghprb.GhprbTrigger;
@@ -21,6 +13,15 @@ import org.kohsuke.github.GHCommitState;
 import org.kohsuke.github.GHRepository;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isNull;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GhprbSimpleStatusTest extends org.jenkinsci.plugins.ghprb.extensions.GhprbExtension {
@@ -107,7 +108,7 @@ public class GhprbSimpleStatusTest extends org.jenkinsci.plugins.ghprb.extension
         given(ghprbPullRequest.isMergeable()).willReturn(false);
 
         GhprbSimpleStatus globalStatus =
-                new GhprbSimpleStatus(true, context, statusUrl, "test1", "test2", false, false, new ArrayList<GhprbBuildResultMessage>(0));
+                new GhprbSimpleStatus(true, context, statusUrl, "test1", "test2", false, new ArrayList<GhprbBuildResultMessage>(0));
         GhprbTrigger.getDscp().getExtensions().add(globalStatus);
 
         GhprbSimpleStatus status = new GhprbSimpleStatus("");

@@ -20,8 +20,6 @@ class GhprbSimpleStatusContext implements Context {
 
     Boolean addTestResults;
 
-    Boolean addCoverageResults;
-
     List<GhprbBuildResultMessage> completedStatus = new ArrayList<GhprbBuildResultMessage>();
 
     /**
@@ -71,13 +69,6 @@ class GhprbSimpleStatusContext implements Context {
      */
     void addTestResults(Boolean addTestResults) {
         this.addTestResults = addTestResults;
-    }
-
-    /**
-     * Add the coverage results as one line if available.
-     */
-    void addCoverageResults(Boolean addCoverageResults) {
-        this.addCoverageResults = addCoverageResults;
     }
 
     /**
