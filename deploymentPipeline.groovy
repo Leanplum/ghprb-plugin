@@ -55,7 +55,7 @@ pipeline {
       }
     }
  } 
-}
+
 
 
 def setupEnvironment(String GCLOUD_PROJECT, String K8S_CLUSTER, String JENKINS_AUTH) {
