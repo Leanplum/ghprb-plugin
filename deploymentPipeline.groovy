@@ -18,22 +18,25 @@ pipeline {
     ansiColor('xterm')
   }
 
-
- stage("Build ghrp plugin from leanplum fork repository...") {
-    steps {
-      script {
-          sh 'mvn package' 
+  stages {
+    
+  stage("Build ghrp plugin from leanplum fork repository...") {
+      steps {
+        script {
+            sh 'mvn package' 
+        }
       }
     }
+
+    stage ("Install the plugin to selected jenkins instance...") {
+      steps {
+        script {
+          echo "Plugin is installed!"
+        }
+      }
+    } 
   }
 
-  stage ("Install the plugin to selected jenkins instance...") {
-    steps {
-      script {
-        echo "Plugin is installed!"
-      }
-    }
-  } 
- }
+}
 
 
