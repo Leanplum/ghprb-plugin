@@ -48,13 +48,14 @@ pipeline {
     }
   }
 
-  stage ("Install the plugin to selected jenkins instance...")
+  stage ("Install the plugin to selected jenkins instance...") {
     steps {
       script {
         echo "Plugin is installed!"
       }
     }
- } 
+  } 
+ }
 
 }
 
