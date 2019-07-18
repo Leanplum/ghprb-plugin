@@ -18,27 +18,6 @@ pipeline {
     ansiColor('xterm')
   }
 
-  stages {
-    stage("Setup Jenkins") {
-      steps {
-        script {
-          load "Tools/jenkins/settings.groovy"
-
-          load "Tools/CICD/settings.groovy"
-          utils = load ("Tools/CICD/utils-0.3.groovy")
-
-          if (BRANCH != 'master') {
-            utils.codeCheckout(BRANCH)
-          }
-
-          utils.configurePython()
-        }
-
-        setupEnvironment(GCLOUD_PROJECT['staging'], K8S_CLUSTER['staging'], JENKINS_AUTH['staging'])
-      }
-    }
-
- 
 
  stage("Build ghrp plugin from leanplum fork repository...") {
     steps {
@@ -59,8 +38,3 @@ pipeline {
 
 }
 
-def setupEnvironment(String GCLOUD_PROJECT, String K8S_CLUSTER, String JENKINS_AUTH) {
-  utils = evaluate readFile ("Tools/CICD/utils-0.3.groovy")
-  utils.gcloudAuth(GCLOUD_PROJECT, JENKINS_AUTH)
-  
-}
