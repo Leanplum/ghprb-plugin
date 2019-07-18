@@ -56,12 +56,10 @@ pipeline {
     }
  } 
 
-
+}
 
 def setupEnvironment(String GCLOUD_PROJECT, String K8S_CLUSTER, String JENKINS_AUTH) {
   utils = evaluate readFile ("Tools/CICD/utils-0.3.groovy")
   utils.gcloudAuth(GCLOUD_PROJECT, JENKINS_AUTH)
   
-}
-
 }
