@@ -30,7 +30,7 @@ pipeline {
         script {
           dir("target") {
             echo "Installing plugin ...."
-            withCredentials([usernameColonPassword(credentialsId: 'jenkinsAdmin', variable: 'USERPASS')]) { 
+            withCredentials([usernameColonPassword(credentialsId: 'lpadmin', variable: 'USERPASS')]) { 
             def CRUMB = sh (script: """curl -s 'https://$USERPASS@${params.JENKINS_URL}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'""",returnStdout: true)
 
            // sh """curl -X POST -H "$CRUMB" --user $USERPASS -i -F file=@ghprb.hpi http://${params.JENKINS_URL}/pluginManager/uploadPlugin"""
