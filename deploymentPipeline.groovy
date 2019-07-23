@@ -1,17 +1,14 @@
 def utils
 
-
-
 pipeline {
+  
   agent { label 'deployment' }
 
-  parameters {
-    string(name: 'BRANCH',
-            defaultValue: 'master',
-            description: 'Choose master to deploy to both staging and production env. Choose any other feature branch to deploy to staging only')
-    choice(name: 'JENKINS_URL', choices: 'https://jenkins-staging.leanplum.com', description: 'Choose jenkins url  where the plugin should be installed ?')
+  environment {
+        MAVEN_HOME = tool('maven-3.6.1')
+        JENKINS_URL = "jenkins-staging.leanplum.com"
 
-  }
+    }
 
   options {
     disableConcurrentBuilds()
@@ -20,7 +17,7 @@ pipeline {
 
   stages {
     
-  stage("Build ghrp plugin from leanplum fork repository...") {
+  stage("Build ghprb plugin from leanplum fork repository...") {
       steps {
         script {
             sh 'mvn package' 
@@ -28,15 +25,22 @@ pipeline {
       }
     }
 
-    stage ("Install the plugin to selected jenkins instance...") {
+    stage ("Install the plugin to Jenkins...") {
       steps {
         script {
-          echo "Plugin is installed!"
-        }
-      }
-    } 
-  }
+          dir("target") {
+            echo "Installing plugin ...."
+            withCredentials([usernameColonPassword(credentialsId: 'jenkinsAdmin', variable: 'USERPASS')]) { 
+            def CRUMB = sh (script: """curl -s 'https://$USERPASS@${params.JENKINS_URL}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'""",returnStdout: true)
 
-}
+           // sh """curl -X POST -H "$CRUMB" --user $USERPASS -i -F file=@ghprb.hpi http://${params.JENKINS_URL}/pluginManager/uploadPlugin"""
+          }
+        }
+       }
+      }
+    }
+  }
+} 
+
 
 
