@@ -31,7 +31,7 @@ pipeline {
           dir("target") {
             echo "Installing plugin ...." 
             script {
-            sh """curl -s -k -v 'https://petar.peshev@leanplum.com:11eacc27f54406da0b933adc6c20cee7e4@${env.JENKINS_URL}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'"""
+            sh """curl --request GET --url 'https://jenkins-staging.leanplum.com/crumbIssuer/api/xml?xpath=concat(//crumbRequestFiel":"11eacc27f54406da0b933adc6c20cee7e4"plum.com"""
             /*withCredentials([usernameColonPassword(credentialsId: 'ppeshevToken', variable: 'USERPASS')]) { 
               def CRUMB = sh (script: """curl -s 'https://petar.peshev@leanplum.com:11eacc27f54406da0b933adc6c20cee7e4@${env.JENKINS_URL}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'""",returnStdout: true)
               echo "$CRUMB"*/
