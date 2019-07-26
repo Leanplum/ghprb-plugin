@@ -2,7 +2,7 @@ def utils
 
 pipeline {
   
-  agent { label 'deployment' }
+  agent any
 
   environment {
         MAVEN_HOME = tool('maven-3.6.1')
