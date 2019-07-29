@@ -2,7 +2,7 @@ def utils
 
 pipeline {
   
-  agent any
+  agent jnlp
 
   environment {
         MAVEN_HOME = tool('maven-3.6.1')
