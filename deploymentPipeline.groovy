@@ -2,7 +2,7 @@ def utils
 
 pipeline {
   
-  agent { label 'k8s base-lp-agent' }
+  agent { label 'deployment' }
 
   environment {
         MAVEN_HOME = tool('maven-3.6.1')
